@@ -1,0 +1,51 @@
+# Promtail values.yaml for Kubernetes with containerd
+config:
+  clients:
+    - url: http://loki-distributed-gateway/loki/api/v1/push
+
+  snippets:
+    pipelineStages:
+      - cri: {}
+
+    extraScrapeConfigs: |
+      - job_name: custom-cri-logs
+        pipeline_stages:
+          - cri: {}
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: custom-cri-logs
+              __path__: /var/log/pods/*/*/*.log
+
+    extraVolumes:
+      - name: pods
+        hostPath:
+          path: /var/log/pods
+      - name: run
+        hostPath:
+          path: /run/promtail
+
+    extraVolumeMounts:
+      - name: pods
+        mountPath: /var/log/pods
+        readOnly: true
+      - name: run
+        mountPath: /run/promtail
+
+# Optional: Resources and tolerations (optional tuning)
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+tolerations:
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule

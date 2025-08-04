@@ -1,0 +1,44 @@
+auth_enabled: false
+
+commonConfig:
+  replication_factor: 2
+  path_prefix: /var/loki
+
+storage:
+  type: s3
+  s3:
+    endpoint: minio.observer.svc.cluster.local:9000
+    bucketnames: loki
+    access_key_id: admin
+    secret_access_key: admin123
+    s3forcepathstyle: true
+    insecure: true
+
+compactor:
+  retention_enabled: true
+  retention_delete_delay: 2h
+  retention_delete_worker_count: 150
+
+limits_config:
+  retention_period: 168h  # 7 days
+
+ingester:
+  lifecycler:
+    ring:
+      kvstore:
+        store: inmemory
+  chunk_idle_period: 5m
+  max_chunk_age: 1h
+
+schema_config:
+  configs:
+  - from: 2023-01-01
+    store: boltdb-shipper
+    object_store: s3
+    schema: v11
+    index:
+      prefix: index_
+      period: 24h
+
+serviceAccounts:
+  create: true
