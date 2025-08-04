@@ -64,7 +64,9 @@ This repository provides a full observability stack for Kubernetes-based CTF (Ca
 ### 1. Clone the Repo
 
 ```bas
-cd ctf-observability
+git clone https://github.com/Furk-st/Kube_monitoring-Loging_stack.git
+cd Kube_monitoring-Loging_stack
+
 ```
 
 ---
