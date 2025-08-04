@@ -12,6 +12,37 @@ This repository provides a full observability stack for Kubernetes-based CTF (Ca
 
 ---
 
+##  System workflow
+<h2 align="center"> Kubernetes Observability Stack – System Flow</h2>
+
+<pre align="center">
+
+                         Kubernetes Cluster (Multi-Node)
+                         ───────────────────────────────
+
+        [ Pod Logs ]      [ Pod Logs ]       [ Pod Logs ]
+             │                 │                  │
+         [ Promtail ]      [ Promtail ]       [ Promtail ]
+             │                 │                  │
+             └────── Logs pushed via HTTP ───────┬─────────────┐
+                                                 │             │
+                                        [ Loki Distributor ]   │
+                                                 │             │
+                                      ┌──────────┴──────────┐  │
+                              [ Loki Ingester ]     [ Loki Querier ]
+                                      │                       │
+                                      ▼                       ▼
+                        Stores logs in chunks       Handles log queries
+                         on object storage          from Grafana UI
+                          [ MinIO Storage ]                │
+                                                          ▼
+                                               [ Grafana Dashboard ]
+
+</pre>
+
+<p align="center"><i>This diagram illustrates how logs flow from each pod into Promtail, then to Loki (via Distributor), and are stored in MinIO and visualized in Grafana.</i></p>
+
+
 ##  Components & Architecture
 
 ```
