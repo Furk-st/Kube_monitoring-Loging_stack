@@ -63,8 +63,7 @@ This repository provides a full observability stack for Kubernetes-based CTF (Ca
 
 ### 1. Clone the Repo
 
-```bash
-git clone https://github.com/<your-username>/ctf-observability.git
+```bas
 cd ctf-observability
 ```
 
